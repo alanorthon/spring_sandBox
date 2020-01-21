@@ -4,16 +4,11 @@ package ru.springCRUDapp.testSpring.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import ru.springCRUDapp.testSpring.model.User;
 import ru.springCRUDapp.testSpring.service.UserService;
-
-import java.util.List;
-
 
 @Controller
 public class UserController {
@@ -25,53 +20,51 @@ public class UserController {
     }
 
     @GetMapping(value = "/")
-    public ModelAndView index() {
-        return new ModelAndView("index");
+    public String getIndexPage() {
+        return "index";
     }
 
     @GetMapping(value = "/allusers")
-    public ModelAndView allUsers() {
-        List<User> allUsers = userService.allUsers();
-        ModelAndView modelAndView = new ModelAndView("allusers");
-        modelAndView.addObject("allUsers", allUsers);
-        return modelAndView;
+    public String getAllUsers(Model model) {
+        model.addAttribute("userList", userService.allUsers());
+        return "allusers";
     }
 
     @GetMapping(value = "/edituser/{id}")
-    public ModelAndView editPage(@PathVariable Long id) {
-        User user = userService.getUserById(id);
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("edituser");
-        modelAndView.addObject("user", user);
-        return modelAndView;
+    public String getUpdateUserPage(@PathVariable Long id, Model model) {
+        model.addAttribute("user", userService.getUserById(id));
+        return "edituser";
     }
 
     @PostMapping(value = "/edituser")
-    public ModelAndView editUser(@ModelAttribute("user") User user) {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("redirect:/allusers");
+    public String updateUser(@ModelAttribute User user, Model model) {
         userService.updateUser(user);
-        return modelAndView;
+        model.addAttribute("message", "User successfully updated!");
+        model.addAttribute("userList", userService.allUsers());
+        return "allusers";
     }
 
     @GetMapping(value = "/adduser")
-    public ModelAndView addPage() {
-        return new ModelAndView("/adduser");
+    public String getAddUserPage() {
+        return "adduser";
     }
 
     @PostMapping(value = "/adduser")
-    public ModelAndView addUser(@ModelAttribute("user") User user) {
-        ModelAndView modelAndView = new ModelAndView("redirect:/allusers");
-        modelAndView.setViewName("redirect:/allusers");
-        userService.addUser(user);
-        return modelAndView;
+    public String addUser(@ModelAttribute User user, Model model) {
+        if (userService.addUser(user)) {
+            model.addAttribute("message", "User successfully added!");
+        } else {
+            model.addAttribute("message", "User with this username is already registered!");
+        }
+        model.addAttribute("userList", userService.allUsers());
+        return "allusers";
     }
 
-    @PostMapping(value="/deleteuser/{id}")
-    public ModelAndView deleteFilm(@PathVariable Long id) {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("redirect:/allusers");
+    @PostMapping(value = "/deleteuser/{id}")
+    public String deleteUser(@PathVariable Long id, Model model) {
+        model.addAttribute("message", "User successfully deleted!");
         userService.deleteUserById(id);
-        return modelAndView;
+        model.addAttribute("userList", userService.allUsers());
+        return "allusers";
     }
 }

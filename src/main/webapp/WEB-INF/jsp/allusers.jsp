@@ -12,6 +12,7 @@
     <title>List of all users</title>
 </head>
 <body>
+<p style="">${message}</p>
 <table style=" width: 30%; border: none">
     <tr>
         <th>Id</th>
@@ -19,7 +20,7 @@
         <th>Password</th>
         <th>email</th>
     </tr>
-    <c:forEach items="${allUsers}" var="user">
+    <c:forEach items="${userList}" var="user">
         <tr>
             <td style="border: 1px solid black; text-align: left">${user.id}</td>
             <td style="border: 1px solid black; text-align: left">${user.login}</td>

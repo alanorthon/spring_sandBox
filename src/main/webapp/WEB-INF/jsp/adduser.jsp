@@ -13,9 +13,9 @@
 <body>
 <section class="fields">
     <form action="/adduser" method="POST">
-        Login: <br><input type="text" name="login"> <br>
-        Password: <br><input type="text" name="password"> <br>
-        Email: <br><input type="email" name="email"> <br>
+        Login: <br><input type="text" name="login" placeholder="enter login"> <br>
+        Password: <br><input type="text" name="password" placeholder="enter password"> <br>
+        Email: <br><input type="email" name="email" placeholder="enter email"> <br>
         <input type="submit" value="Add user">
     </form>
     <form action="/allusers" method="GET">
