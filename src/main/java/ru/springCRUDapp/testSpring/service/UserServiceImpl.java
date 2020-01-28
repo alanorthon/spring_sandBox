@@ -1,22 +1,27 @@
 package ru.springCRUDapp.testSpring.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.springCRUDapp.testSpring.DAO.UserDAO;
+import ru.springCRUDapp.testSpring.model.Role;
 import ru.springCRUDapp.testSpring.model.User;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
 @Transactional
 public class UserServiceImpl implements UserService {
-    private UserDAO userDAO;
-
     @Autowired
-    public void setUserDAO(UserDAO userDAO) {
-        this.userDAO = userDAO;
-    }
+    private UserDAO userDAO;
+    @Autowired
+    BCryptPasswordEncoder bCryptPasswordEncoder;
+
 
     @Override
     public List<User> allUsers() {
@@ -26,6 +31,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean addUser(User user) {
         if (!userDAO.isExistingUser(user.getLogin())) {
+            user.setRoles(Collections.singleton(new Role(1L, "ROLE_USER")));
+            user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
             userDAO.addUser(user);
             return true;
         }
@@ -34,6 +41,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateUser(User user) {
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         userDAO.updateUser(user);
     }
 
@@ -45,5 +53,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUserById(Long id) {
         userDAO.deleteUserById(id);
+    }
+
+    @Override
+    public User getUserByLogin(String login) {
+        return userDAO.getUserByLogin(login);
     }
 }

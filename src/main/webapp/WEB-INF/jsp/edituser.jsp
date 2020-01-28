@@ -10,6 +10,8 @@
 <html>
 <head>
     <title>Edit user</title>
+    <link href="<c:url value='/WEB-INF/res' />" rel="stylesheet"/>
+    <link href="<c:url value='/WEB-INF/res' />" rel="stylesheet"/>
 </head>
 <body>
 <section class="fields">
@@ -18,6 +20,7 @@
         Login: <br><input type="text" name="login" value=${user.login}> <br>
         Password: <br><input type="text" name="password" value=${user.password}> <br>
         Email: <br><input type="email" name="email" value=${user.email}> <br>
+        Role: <br>
         <input type="submit" value="Edit User">
     </form>
     <form action="/allusers" method="GET">

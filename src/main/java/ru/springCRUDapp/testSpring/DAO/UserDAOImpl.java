@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 import ru.springCRUDapp.testSpring.model.User;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import java.util.List;
 
@@ -36,6 +37,17 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public User getUserById(Long id) {
         return entityManager.find(User.class, id);
+    }
+
+    @Override
+    public User getUserByLogin(String login) {
+        try {
+            return entityManager.createQuery("FROM User WHERE login = :login", User.class)
+                    .setParameter("login", login)
+                    .getSingleResult();
+        } catch (NoResultException ex) {
+            return null;
+        }
     }
 
     @Override

@@ -1,11 +1,17 @@
 package ru.springCRUDapp.testSpring.model;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import javax.persistence.*;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "user")
-public class User {
+public class User implements UserDetails {
 
     @Id
     @Column(name = "id")
@@ -21,32 +27,13 @@ public class User {
     @Column(name = "email")
     private String email;
 
+    @Transient
+    private String passwordConfirm;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    private Set<Role> roles;
+
     public User() {
-    }
-
-    public User(String login, String password, String email) {
-        this.login = login;
-        this.password = password;
-        this.email = email;
-    }
-
-    public User(Long id, String login, String password, String email) {
-        this.id = id;
-        this.login = login;
-        this.password = password;
-        this.email = email;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public Long getId() {
@@ -61,12 +48,71 @@ public class User {
         return login;
     }
 
-    public String getPassword() {
-        return password;
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getEmail() {
         return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPasswordConfirm() {
+        return passwordConfirm;
+    }
+
+    public void setPasswordConfirm(String passwordConfirm) {
+        this.passwordConfirm = passwordConfirm;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return roles;
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return login;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 
     @Override
@@ -77,12 +123,14 @@ public class User {
         return Objects.equals(getId(), user.getId()) &&
                 Objects.equals(getLogin(), user.getLogin()) &&
                 Objects.equals(getPassword(), user.getPassword()) &&
-                Objects.equals(getEmail(), user.getEmail());
+                Objects.equals(getEmail(), user.getEmail()) &&
+                Objects.equals(getPasswordConfirm(), user.getPasswordConfirm()) &&
+                Objects.equals(getRoles(), user.getRoles());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getLogin(), getPassword(), getEmail());
+        return Objects.hash(getId(), getLogin(), getPassword(), getEmail(), getPasswordConfirm(), getRoles());
     }
 
     @Override
@@ -92,6 +140,8 @@ public class User {
                 ", login='" + login + '\'' +
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
+                ", passwordConfirm='" + passwordConfirm + '\'' +
+                ", roles=" + roles +
                 '}';
     }
 }
