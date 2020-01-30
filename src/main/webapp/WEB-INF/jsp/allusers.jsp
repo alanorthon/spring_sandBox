@@ -16,16 +16,20 @@
 <table style=" width: 30%; border: none">
     <tr>
         <th>Id</th>
-        <th>Login</th>
+        <th>Username</th>
         <th>Password</th>
         <th>email</th>
+        <th>Role</th>
     </tr>
     <c:forEach items="${userList}" var="user">
         <tr>
             <td style="border: 1px solid black; text-align: left">${user.id}</td>
-            <td style="border: 1px solid black; text-align: left">${user.login}</td>
+            <td style="border: 1px solid black; text-align: left">${user.username}</td>
             <td style="border: 1px solid black; text-align: left">${user.password}</td>
             <td style="border: 1px solid black; text-align: left">${user.email}</td>
+            <td style="border: 1px solid black; text-align: left">
+                <c:forEach items="${user.roles}" var="role">${role.name}</c:forEach>
+            </td>
             <td>
                 <form action="/edituser/${user.id}" method="GET">
                     <input type="submit" value="Edit User"/>
@@ -42,6 +46,9 @@
 <br/>
 <form action="/adduser" method="GET">
     <input type="submit" value="Add User">
+</form>
+<form action="/logout">
+    <input type="submit" value="Logout">
 </form>
 <form action="/" method="GET">
     <input type="submit" value="Go back">

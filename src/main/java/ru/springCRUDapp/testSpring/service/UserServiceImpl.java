@@ -1,9 +1,6 @@
 package ru.springCRUDapp.testSpring.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,7 +27,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean addUser(User user) {
-        if (!userDAO.isExistingUser(user.getLogin())) {
+        if (!userDAO.isExistingUser(user.getUsername())) {
             user.setRoles(Collections.singleton(new Role(1L, "ROLE_USER")));
             user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
             userDAO.addUser(user);
@@ -42,6 +39,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateUser(User user) {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+
         userDAO.updateUser(user);
     }
 
@@ -56,7 +54,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUserByLogin(String login) {
-        return userDAO.getUserByLogin(login);
+    public User getUserByUsername(String login) {
+        return userDAO.getUserByUsername(login);
     }
+
 }

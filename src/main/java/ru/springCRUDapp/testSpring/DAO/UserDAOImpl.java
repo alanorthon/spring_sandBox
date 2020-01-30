@@ -40,10 +40,10 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public User getUserByLogin(String login) {
+    public User getUserByUsername(String username) {
         try {
-            return entityManager.createQuery("FROM User WHERE login = :login", User.class)
-                    .setParameter("login", login)
+            return entityManager.createQuery("FROM User WHERE username = :username", User.class)
+                    .setParameter("username", username)
                     .getSingleResult();
         } catch (NoResultException ex) {
             return null;
@@ -56,9 +56,9 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public boolean isExistingUser(String login) {
-        return !entityManager.createQuery("FROM User where login =:login")
-                .setParameter("login", login)
+    public boolean isExistingUser(String username) {
+        return !entityManager.createQuery("FROM User where username =:username")
+                .setParameter("username", username)
                 .getResultList()
                 .isEmpty();
     }

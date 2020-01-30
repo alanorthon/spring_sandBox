@@ -5,16 +5,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import ru.springCRUDapp.testSpring.model.Role;
 import ru.springCRUDapp.testSpring.model.User;
 import ru.springCRUDapp.testSpring.service.UserService;
 
+import java.util.Collections;
+
 @Controller
-@RequestMapping("/admin")
 public class AdminController {
     @Autowired
     private UserService userService;
 
-    @GetMapping(value = "/allusers")
+    @GetMapping(value = "/admin")
     public String getAllUsers(Model model) {
         model.addAttribute("userList", userService.allUsers());
         return "allusers";
@@ -27,7 +29,14 @@ public class AdminController {
     }
 
     @PostMapping(value = "/edituser")
-    public String updateUser(@ModelAttribute User user, Model model) {
+    public String updateUser(@ModelAttribute User user,
+                             @RequestParam String role,
+                             Model model) {
+        if (role.equalsIgnoreCase("admin")) {
+            user.setRoles(Collections.singleton(new Role(2L, "ROLE_ADMIN")));
+        } else {
+            user.setRoles(Collections.singleton(new Role(1L, "ROLE_USER")));
+        }
         userService.updateUser(user);
         model.addAttribute("message", "User successfully updated!");
         model.addAttribute("userList", userService.allUsers());

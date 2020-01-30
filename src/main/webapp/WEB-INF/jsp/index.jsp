@@ -17,17 +17,29 @@
 <body>
 <div>
     <sec:authorize access="!isAuthenticated()">
-        <h4><a href="/login">Sing In</a></h4>
-        <h4><a href="/registration">Sing Up</a></h4>
+        <form action="/login" method="GET">
+            <input type="submit" value="Sing In">
+        </form>
+        <%--<h4><a href="/login">Sing In</a></h4>--%>
+        <form action="/registration" method="GET">
+            <input type="submit" value="Sing Up">
+        </form>
+        <%--<h4><a href="/registration">Sing Up</a></h4>--%>
     </sec:authorize>
     <sec:authorize access="hasRole('ADMIN')">
-        <h4><a href="/admin">Go to admin page</a></h4>
+        <form action="/admin" method="GET">
+            <input type="submit" value="Go to administrator page">
+        </form>
     </sec:authorize>
     <sec:authorize access="hasRole('USER')">
-        <h4><a href="/user">Go to user page</a></h4>
+        <form action="/user" method="GET">
+            <input type="submit" value="Go to User page">
+        </form>
     </sec:authorize>
     <sec:authorize access="isAuthenticated()">
-        <h4><a href="/logout">Logout</a></h4>
+        <form action="/logout">
+            <input type="submit" value="Logout">
+        </form>
     </sec:authorize>
 </div>
 </body>

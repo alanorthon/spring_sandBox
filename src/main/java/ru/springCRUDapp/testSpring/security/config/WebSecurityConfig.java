@@ -35,18 +35,21 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
-                .csrf().disable()
+                .csrf()
+                .disable()
                 .authorizeRequests()
-                .antMatchers("/", "/registration", "/login").permitAll()
-                .antMatchers("/user/**").hasAnyRole("ADMIN", "USER")
+                .antMatchers("/registration/**", "/login").not().fullyAuthenticated()
                 .antMatchers("/admin/**").hasRole("ADMIN")
+                .antMatchers("/user").hasAnyRole("USER", "ADMIN")
+                .antMatchers("/").permitAll()
                 .anyRequest().authenticated()
 
                 .and()
                 .formLogin()
-                .defaultSuccessUrl("/", false)
                 .loginPage("/login")
+                .failureUrl("/login?error")
                 .successHandler(authenticationSuccessHandler)
+
 
                 .and()
                 .logout()
@@ -58,8 +61,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService)
-                .passwordEncoder(bCryptPasswordEncoder());
+        auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
     }
 
 

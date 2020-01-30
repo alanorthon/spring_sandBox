@@ -6,7 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
-<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 
 <!DOCTYPE html>
 <html>
@@ -18,18 +18,21 @@
 <body>
 <div>
     <form method="POST" action="/login">
-        <h2>Вход в систему</h2>
+        <h2>Please enter login and password</h2>
         <p style="">${message}</p>
-        <div>
-            <input name="login" type="text" placeholder="login"
-                   autofocus="true"/>
-            <input name="password" type="password" placeholder="Password"/>
-            <button type="submit">Log In</button>
-
-            <h4><a href="/registration">Sing Up</a></h4>
-        </div>
+        <label>
+            <input name="username" type="text" placeholder="username"/>
+        </label>
+        <label>
+            <input name="password" type="password" placeholder="password"/>
+        </label>
+        <button type="submit">Log In</button>
     </form>
 </div>
-
+<div>
+    <form action="/registration" method="GET">
+        <input type="submit" value="Sing Up">
+    </form>
+</div>
 </body>
 </html>

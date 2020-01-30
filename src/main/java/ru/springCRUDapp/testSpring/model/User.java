@@ -5,7 +5,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -18,8 +17,8 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "login")
-    private String login;
+    @Column(name = "username")
+    private String username;
 
     @Column(name = "password")
     private String password;
@@ -36,6 +35,20 @@ public class User implements UserDetails {
     public User() {
     }
 
+    public User(String username, String password, String email) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+    }
+
+    public User(String username, String password, String email, Set<Role> roles) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.roles = roles;
+    }
+
+
     public Long getId() {
         return id;
     }
@@ -44,12 +57,8 @@ public class User implements UserDetails {
         this.id = id;
     }
 
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
+    public void setUsername(String login) {
+        this.username = login;
     }
 
     public void setPassword(String password) {
@@ -80,6 +89,7 @@ public class User implements UserDetails {
         this.roles = roles;
     }
 
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles;
@@ -92,7 +102,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return login;
+        return username;
     }
 
     @Override
@@ -121,7 +131,7 @@ public class User implements UserDetails {
         if (!(o instanceof User)) return false;
         User user = (User) o;
         return Objects.equals(getId(), user.getId()) &&
-                Objects.equals(getLogin(), user.getLogin()) &&
+                Objects.equals(getUsername(), user.getUsername()) &&
                 Objects.equals(getPassword(), user.getPassword()) &&
                 Objects.equals(getEmail(), user.getEmail()) &&
                 Objects.equals(getPasswordConfirm(), user.getPasswordConfirm()) &&
@@ -130,14 +140,14 @@ public class User implements UserDetails {
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getLogin(), getPassword(), getEmail(), getPasswordConfirm(), getRoles());
+        return Objects.hash(getId(), getUsername(), getPassword(), getEmail(), getPasswordConfirm(), getRoles());
     }
 
     @Override
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", login='" + login + '\'' +
+                ", login='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
                 ", passwordConfirm='" + passwordConfirm + '\'' +

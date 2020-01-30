@@ -15,9 +15,11 @@ Hi ${username}!
 <H2>You can do nothing on this page<br/>
     Just relax and look on this picture</H2>
 <img src="https://i.gifer.com/fyDA.gif" align="center" width="300px" alt="pic"><br/>
-<form action="/login" method="GET">
-    <input type="submit" value="Go to Authorisation page">
+<form action="/" method="GET">
+    <input type="submit" value="Go back">
 </form>
-<a href="/logout">logout</a>
+<form action="/logout">
+    <input type="submit" value="Logout">
+</form>
 </body>
 </html>

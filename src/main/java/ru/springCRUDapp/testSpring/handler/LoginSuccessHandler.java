@@ -19,7 +19,8 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request,
                                         HttpServletResponse response, Authentication authentication) throws IOException {
-        String targetUrl = authentication.getAuthorities().contains(new Role("ADMIN")) ? "/admin/allusers" : "/user";
+
+        String targetUrl = authentication.getAuthorities().toString().contains("ROLE_ADMIN") ? "/admin" : "/user";
         redirectStrategy.sendRedirect(request, response, targetUrl);
     }
 }

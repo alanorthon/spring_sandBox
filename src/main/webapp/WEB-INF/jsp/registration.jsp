@@ -20,9 +20,9 @@
     <form:form method="POST" modelAttribute="userForm">
         <h2>Sing up</h2>
         <div>
-            <form:input type="text" path="login" placeholder="login"
+            <form:input type="text" path="username" placeholder="login"
                         autofocus="true"></form:input>
-            <form:errors path="login"></form:errors>
+            <form:errors path="username"></form:errors>
                 ${loginError}
         </div>
         <div>
@@ -37,9 +37,13 @@
         <div>
             <form:input type="email" path="email" placeholder="e-mail"></form:input>
         </div>
+        <input name="role" type="hidden" value="user">
         <button type="submit">Sing Up</button>
     </form:form>
-    <a href="/">Go back</a>
+    <br/>
+    <form action="/" method="GET">
+        <input type="submit" value="Go back">
+    </form>
 </div>
 </body>
 </html>
