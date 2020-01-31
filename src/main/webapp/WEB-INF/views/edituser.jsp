@@ -17,10 +17,12 @@
 <section class="fields">
     <form action="/edituser" method="POST">
         <input type="hidden" name="id" value=${user.id}>
+        <input type="hidden" name="password" value="${user.password}">
         Login: <br><input type="text" name="username" value=${user.username}> <br>
-        Password: <br><input type="text" name="password" value=${user.password}> <br>
+        Password: <br><input type="text" name="newPassword" placeholder="Type new password"> <br>
         Email: <br><input type="email" name="email" value=${user.email}> <br>
-        Role: <br><input type="text" name="role" placeholder="admin or user" ><br>
+        Role: <p><input type="radio" name="role" value="user">USER
+        <br><input type="radio" name="role" value="admin">ADMIN</p>
         <input type="submit" value="Edit User">
     </form>
     <form action="/admin" method="GET">

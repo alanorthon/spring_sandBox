@@ -1,4 +1,4 @@
-package ru.springCRUDapp.testSpring.handler;
+package ru.springCRUDapp.testSpring.security;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.DefaultRedirectStrategy;

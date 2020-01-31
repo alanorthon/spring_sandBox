@@ -11,7 +11,7 @@
     <title>User personal page</title>
 </head>
 <body>
-Hi ${username}!
+<h1>Hi ${username}!<h2></h2>
 <H2>You can do nothing on this page<br/>
     Just relax and look on this picture</H2>
 <img src="https://i.gifer.com/fyDA.gif" align="center" width="300px" alt="pic"><br/>

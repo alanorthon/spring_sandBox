@@ -1,6 +1,9 @@
 package ru.springCRUDapp.testSpring.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,13 +15,15 @@ import java.util.Collections;
 import java.util.List;
 
 @Service
-@Transactional
 public class UserServiceImpl implements UserService {
-    @Autowired
-    private UserDAO userDAO;
-    @Autowired
-    BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final UserDAO userDAO;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    @Autowired
+    public UserServiceImpl(UserDAO userDAO, BCryptPasswordEncoder bCryptPasswordEncoder) {
+        this.userDAO = userDAO;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+    }
 
     @Override
     public List<User> allUsers() {
@@ -26,9 +31,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean addUser(User user) {
+    @Transactional
+    public boolean addUser(User user, String role) {
         if (!userDAO.isExistingUser(user.getUsername())) {
-            user.setRoles(Collections.singleton(new Role(1L, "ROLE_USER")));
+            setRoleByName(user, role);
             user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
             userDAO.addUser(user);
             return true;
@@ -37,6 +43,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void updateUser(User user) {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 
@@ -49,6 +56,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void deleteUserById(Long id) {
         userDAO.deleteUserById(id);
     }
@@ -58,4 +66,12 @@ public class UserServiceImpl implements UserService {
         return userDAO.getUserByUsername(login);
     }
 
+    @Override
+    public void setRoleByName(User user, String role) {
+        if (role.equalsIgnoreCase("admin")) {
+            user.setRoles(Collections.singleton(new Role(2L, "ROLE_ADMIN")));
+        } else {
+            user.setRoles(Collections.singleton(new Role(1L, "ROLE_USER")));
+        }
+    }
 }

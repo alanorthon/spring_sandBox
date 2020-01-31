@@ -15,6 +15,7 @@
 </head>
 <h1>Welcome to my first Spring MVC app</h1>
 <body>
+<h4>${message}</h4>
 <div>
     <sec:authorize access="!isAuthenticated()">
         <form action="/login" method="GET">

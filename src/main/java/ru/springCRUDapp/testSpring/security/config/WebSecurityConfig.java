@@ -18,11 +18,12 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableWebSecurity
 @ComponentScan(basePackages = "ru.springCRUDapp.testSpring")
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-    private UserDetailsService userDetailsService;
-    private AuthenticationSuccessHandler authenticationSuccessHandler;
+    private final UserDetailsService userDetailsService;
+    private final AuthenticationSuccessHandler authenticationSuccessHandler;
 
     @Autowired
-    public WebSecurityConfig(UserDetailsService userDetailsService, AuthenticationSuccessHandler authenticationSuccessHandler) {
+    public WebSecurityConfig(UserDetailsService userDetailsService,
+                             AuthenticationSuccessHandler authenticationSuccessHandler) {
         this.userDetailsService = userDetailsService;
         this.authenticationSuccessHandler = authenticationSuccessHandler;
     }
@@ -38,8 +39,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf()
                 .disable()
                 .authorizeRequests()
-                .antMatchers("/registration/**", "/login").not().fullyAuthenticated()
-                .antMatchers("/admin/**").hasRole("ADMIN")
+                .antMatchers("/registration", "/login").not().fullyAuthenticated()
+                .antMatchers("/admin").hasRole("ADMIN")
                 .antMatchers("/user").hasAnyRole("USER", "ADMIN")
                 .antMatchers("/").permitAll()
                 .anyRequest().authenticated()
@@ -50,13 +51,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .failureUrl("/login?error")
                 .successHandler(authenticationSuccessHandler)
 
-
                 .and()
                 .logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                 .logoutSuccessUrl("/").deleteCookies("JSESSIONID")
                 .invalidateHttpSession(true)
-                .permitAll();
+                .permitAll()
+
+                .and()
+                .exceptionHandling().accessDeniedPage("/403");
     }
 
     @Override

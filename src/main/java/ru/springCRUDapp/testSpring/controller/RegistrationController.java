@@ -14,9 +14,12 @@ import javax.validation.Valid;
 
 @Controller
 public class RegistrationController {
+    private final UserService userService;
 
     @Autowired
-    private UserService userService;
+    public RegistrationController(UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping("/registration")
     public String registration(Model model) {
@@ -31,11 +34,11 @@ public class RegistrationController {
         if (bindingResult.hasErrors()) {
             return "registration";
         }
-        if (!userForm.getPassword().equals(userForm.getPasswordConfirm())){
+        if (!userForm.getPassword().equals(userForm.getPasswordConfirm())) {
             model.addAttribute("passwordError", "You entered two different passwords. Please try again.");
             return "registration";
         }
-        if (!userService.addUser(userForm)){
+        if (!userService.addUser(userForm, "user")) {
             model.addAttribute("loginError", "User with this Login already registered");
             return "registration";
         }

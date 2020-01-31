@@ -18,7 +18,7 @@ public class LoginController {
         if (request.getParameterMap().containsKey("error")) {
             model.addAttribute("message", "Username or password is invalid!");
         } else if(request.getParameterMap().containsKey("logout")) {
-            model.addAttribute("message", "Bye! See you next time!");
+            model.addAttribute("message", "Adios, May Force be with U!");
         }
         return "login";
     }

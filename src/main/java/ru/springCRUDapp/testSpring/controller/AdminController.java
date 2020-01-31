@@ -2,6 +2,7 @@ package ru.springCRUDapp.testSpring.controller;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -13,8 +14,14 @@ import java.util.Collections;
 
 @Controller
 public class AdminController {
+    private final UserService userService;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
     @Autowired
-    private UserService userService;
+    public AdminController(UserService userService, BCryptPasswordEncoder bCryptPasswordEncoder) {
+        this.userService = userService;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+    }
 
     @GetMapping(value = "/admin")
     public String getAllUsers(Model model) {
@@ -29,14 +36,21 @@ public class AdminController {
     }
 
     @PostMapping(value = "/edituser")
-    public String updateUser(@ModelAttribute User user,
+    public String updateUser(@RequestParam("id") String id,
+                             @RequestParam String password,
+                             @RequestParam String username,
+                             @RequestParam String newPassword,
+                             @RequestParam String email,
                              @RequestParam String role,
                              Model model) {
-        if (role.equalsIgnoreCase("admin")) {
-            user.setRoles(Collections.singleton(new Role(2L, "ROLE_ADMIN")));
+        Long tempId = Long.parseLong(id);
+        User user;
+        if (password.equals(bCryptPasswordEncoder.encode(newPassword))) {
+            user = new User(tempId, username, email);
         } else {
-            user.setRoles(Collections.singleton(new Role(1L, "ROLE_USER")));
+            user = new User(tempId, username, newPassword, email);
         }
+        userService.setRoleByName(user, role);
         userService.updateUser(user);
         model.addAttribute("message", "User successfully updated!");
         model.addAttribute("userList", userService.allUsers());
@@ -49,8 +63,10 @@ public class AdminController {
     }
 
     @PostMapping(value = "/adduser")
-    public String addUser(@ModelAttribute User user, Model model) {
-        if (userService.addUser(user)) {
+    public String addUser(@ModelAttribute User user,
+                          @RequestParam String role,
+                          Model model) {
+        if (userService.addUser(user, role)) {
             model.addAttribute("message", "User successfully added!");
         } else {
             model.addAttribute("message", "User with this username is already registered!");

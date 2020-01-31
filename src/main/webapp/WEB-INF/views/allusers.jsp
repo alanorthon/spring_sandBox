@@ -17,7 +17,6 @@
     <tr>
         <th>Id</th>
         <th>Username</th>
-        <th>Password</th>
         <th>email</th>
         <th>Role</th>
     </tr>
@@ -25,7 +24,6 @@
         <tr>
             <td style="border: 1px solid black; text-align: left">${user.id}</td>
             <td style="border: 1px solid black; text-align: left">${user.username}</td>
-            <td style="border: 1px solid black; text-align: left">${user.password}</td>
             <td style="border: 1px solid black; text-align: left">${user.email}</td>
             <td style="border: 1px solid black; text-align: left">
                 <c:forEach items="${user.roles}" var="role">${role.name}</c:forEach>

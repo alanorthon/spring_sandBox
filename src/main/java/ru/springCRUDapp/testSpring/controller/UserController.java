@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class UserController {
     @GetMapping("/user")
-    public String getUserPersonalPage(Model model, Authentication authentication) {
+    public String getUserPage(Model model, Authentication authentication) {
         String username = ((UserDetails) authentication.getPrincipal()).getUsername();
         model.addAttribute("username", username);
         return "userpage";
