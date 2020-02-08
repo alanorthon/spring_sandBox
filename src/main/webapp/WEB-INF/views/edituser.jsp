@@ -10,9 +10,6 @@
 <html>
 <head>
     <title>Edit user</title>
-    <link href="<c:url value='/WEB-INF/res' />" rel="stylesheet"/>
-    <link href="<c:url value='/WEB-INF/res' />" rel="stylesheet"/>
-</head>
 <body>
 <section class="fields">
     <form action="/edituser" method="POST">

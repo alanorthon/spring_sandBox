@@ -16,8 +16,8 @@
         Login: <br><input type="text" name="username" placeholder="enter username"> <br>
         Password: <br><input type="text" name="password" placeholder="enter password"> <br>
         Email: <br><input type="email" name="email" placeholder="enter email"> <br>
-        Role: <p><input type="radio" name="role" value="user">USER <br>
-        <input type="radio" name="role" value="admin">ADMIN </p>
+        Role: <p><input type="radio" name="role" value="user">USER<br>
+        <input type="radio" name="role" value="admin">ADMIN</p>
         <input type="submit" value="Add user">
     </form>
     <form action="/admin" method="GET">
